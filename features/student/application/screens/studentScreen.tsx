@@ -75,6 +75,8 @@ const StudentScreenView = () => {
                 }}
                 />
             </View>
+            <View>
+            </View>
         </View>
     );
 }
