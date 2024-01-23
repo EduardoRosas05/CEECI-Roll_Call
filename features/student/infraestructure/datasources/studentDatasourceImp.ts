@@ -7,7 +7,7 @@ class StudentDatasourceImp extends StudentDatasource {
 
     async getStudent(): Promise<StudentResult> {
         try {
-            const response = await fetch (`${BackendConfig.url}/api/rollsList`);
+            const response = await fetch (`${BackendConfig.url}/api/rollsListUser`);
             const jsonResponde = await response.json();
 
             console.log(jsonResponde);
@@ -18,9 +18,8 @@ class StudentDatasourceImp extends StudentDatasource {
 
             const students = jsonResponde.map((item:any) => {
                 const student = new Student (
-                    item.attendance,
+                    item.key,
                     item.fullName,
-                    item.date,
                     item.id,
                 );
                 return student;

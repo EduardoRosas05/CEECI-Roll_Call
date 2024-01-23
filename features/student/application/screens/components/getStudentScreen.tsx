@@ -10,15 +10,13 @@ type CardProps = {
 const StudentCard: React.FC<CardProps> = ({
     student,
 }) => {
-      const [isChecked, setChecked] = useState(false);
 
     return(
         
         <View style={styles.container1}>
-            <Text style={styles.cell}> {student.id} </Text>
             <Text style={styles.cell}> {student.fullName} </Text>
-            <Checkbox style={styles.checkbox} value={student.attendance} />
-            <Text style={styles.cell}>{student.date.toString().split('T')[0]}</Text>
+            <Text style={styles.cell}>{student.key}</Text>
+            <Checkbox style={styles.checkbox}/>
         </View>
     );
 };

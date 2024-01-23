@@ -1,19 +1,16 @@
 class Student {
 
  id? : number;   
- attendance: boolean;
- date: string;
+ key: string;
  fullName: string;
 
  constructor (
-    attendance:boolean,
+    key:string,
     fullName:string,
-    date: string, // Asumiremos que obtienemos la fecha como una cadena
     id?:number,
  ){
     this.id = id;
-    this.attendance = attendance;
-    this.date = date;
+    this.key = key;
     this.fullName = fullName;
  }
 }
