@@ -1,23 +1,57 @@
 import React, { useState } from "react";
-import { SafeAreaView } from "react-native";
+import { Modal, StyleSheet, View, SafeAreaView, Button } from "react-native";
 import { Calendar } from "react-native-calendars";
 
-export const Calen = () => {
+interface CalendarModalProps {
+  visible: boolean;
+  onClose: () => void;
+  setSelectedDate: (date: Date) => void;
+}
 
-  const [selectedDate, setSelectedDate] = useState("");
+const Calen: React.FC<CalendarModalProps> = ({ visible, onClose }) => {
 
-  const onDayPress = (day:any) => {
+  const [selectedDate, setSelectedDate] = useState<string | undefined>();
+
+  const onDayPress = (day: any) => {
     setSelectedDate(day.dateString);
-
     console.log(day);
   };
 
   return (
-    <SafeAreaView>
-      <Calendar
-        onDayPress={onDayPress}
-        markedDates={{ [selectedDate]: { selected: true } }}
-      />
-    </SafeAreaView>
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={visible}
+      onRequestClose={onClose}
+    >
+      <View style={styles.modalContainer}>
+        <View style={styles.modalContent}>
+          <Calendar
+            onDayPress={onDayPress}
+            markedDates={selectedDate ? { [selectedDate]: { selected: true } } : {}}
+          />
+          <Button title="Cerrar" onPress={onClose} />
+        </View>
+      </View>
+    </Modal>
   );
 };
+
+const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: 300,
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+});
+
+export default Calen;
+

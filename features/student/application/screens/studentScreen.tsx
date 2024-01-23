@@ -5,12 +5,13 @@ import { StudentProvider, useStudentState } from "../providers/getStudentProvide
 import { FlatList, StyleSheet, Text, View, TouchableOpacity} from "react-native";
 import { IconButton } from 'react-native-paper';
 import Calendar from "../../../../components/calendar";
+import Calen from "../../../../components/cale";
 
 const StudentScreenView = () => {
 
     const [isCalendarVisible, setCalendarVisible] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date());
-
+    
     const {
         students,
         loading,
@@ -66,10 +67,10 @@ const StudentScreenView = () => {
             {renderCards()}
             </View>
             <View>
-            <Calendar
-                visible={isCalendarVisible}
+            <Calen 
+                visible={isCalendarVisible} 
                 onClose={() => setCalendarVisible(false)}
-                onDateSelect={(date) => {
+                setSelectedDate={(date) => {
                     setSelectedDate(date);
                     setCalendarVisible(false);
                 }}

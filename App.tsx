@@ -1,12 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import StudentScreen from './features/student/application/screens/studentScreen';
-import { Calen } from './components/cale';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Calen></Calen>
+      <StudentScreen/>
       <StatusBar style="auto" />
     </View>
   );
