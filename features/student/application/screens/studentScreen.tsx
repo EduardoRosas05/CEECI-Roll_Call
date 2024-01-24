@@ -52,19 +52,21 @@ const StudentScreenView = () => {
             </View>
 
             <View style={styles.buttonCon}>
-                
                 <TouchableOpacity style={styles.buttonCo} onPress={() => setCalendarVisible(true)} >
-                    <IconButton icon={"calendar"} size={50}>
-                        
-                    </IconButton>   
+                    <IconButton icon={"calendar"} size={50} iconColor="green"/>
                     <Text style={styles.textStyle}>
-                        Selecione una fecha
+                        {selectedDate.toLocaleDateString()}
                     </Text>
                 </TouchableOpacity>
             </View>
-            
+
+            <View style={styles.container1}>
+                <Text style={styles.cell}>Nombre</Text>
+                <Text style={styles.cell}>Matricula</Text>
+                <Text style={styles.cell}>Asistencia</Text>
+            </View>
             <View style={styles.list}>
-            {renderCards()}
+                {renderCards()}
             </View>
             <View>
             <Calen 
@@ -74,7 +76,7 @@ const StudentScreenView = () => {
                     setSelectedDate(date);
                     setCalendarVisible(false);
                 }}
-                />
+            />
             </View>
             <View>
             </View>
@@ -89,10 +91,11 @@ const StudentScreen = (props: any) => (
 
 const styles = StyleSheet.create({
     list: {
-        marginTop: 40
+        marginLeft: '5%',
+        marginRight: '5%'
     },
     head: {
-        marginTop: 200,
+        marginTop: 250,
         fontSize: 16
     },
     buttonCon:{
@@ -106,7 +109,23 @@ const styles = StyleSheet.create({
         width: 'auto',
         fontSize: 16,
         textAlign: 'center'
-    }
+    },
+    container1: {
+        marginTop: 40,
+        marginLeft: '5%',
+        marginRight: '5%',
+        width: '90%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        borderBottomWidth: 1, // Agrega un borde inferior para separar las filas
+        borderColor: '#ccc', // Color del borde
+        paddingVertical: 7, // Espaciado vertical
+      },
+      cell: {
+        flex: 1, // Hace que los elementos ocupen el mismo ancho
+        textAlign: 'center', // Centra el texto horizontalmente
+    },
+    
 });
 
 export default StudentScreen;

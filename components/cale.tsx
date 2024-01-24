@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, StyleSheet, View, SafeAreaView, Button } from "react-native";
+import { Modal, StyleSheet, View, Text, Button } from "react-native";
 import { Calendar } from "react-native-calendars";
 
 interface CalendarModalProps {
@@ -8,16 +8,18 @@ interface CalendarModalProps {
   setSelectedDate: (date: Date) => void;
 }
 
-const Calen: React.FC<CalendarModalProps> = ({ visible, onClose }) => {
+const Calen: React.FC<CalendarModalProps> = ({ visible, onClose, setSelectedDate  }) => {
 
-  const [selectedDate, setSelectedDate] = useState<string | undefined>();
+  const [selectedDate] = useState<string | undefined>();
 
   const onDayPress = (day: any) => {
-    setSelectedDate(day.dateString);
-    console.log(day);
+    setSelectedDate(new Date(day.dateString));
+    console.log(selectedDate);
+    onClose();
   };
 
   return (
+    <View>
     <Modal
       animationType="slide"
       transparent={true}
@@ -33,7 +35,8 @@ const Calen: React.FC<CalendarModalProps> = ({ visible, onClose }) => {
           <Button title="Cerrar" onPress={onClose} />
         </View>
       </View>
-    </Modal>
+    </Modal> 
+  </View>
   );
 };
 

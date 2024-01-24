@@ -1,30 +1,24 @@
 import React, { useState } from "react";
-import Student from "../../../domain/entities/student";
 import RollList from "../../../domain/entities/rollList";
 import { View, StyleSheet, Text } from "react-native";
 import Checkbox from 'expo-checkbox';
 
 
 type CardProps = {
-    student: Student,
+    rollList: RollList,
 }
 
-const StudentCard: React.FC<CardProps> = ({
-    student,
+const StudentRollList: React.FC<CardProps> = ({
+    rollList,
 }) => {
-
     return(
+        <Checkbox
         
-        <View style={styles.container1}>
-            <Text style={styles.cell}> {student.fullName} </Text>
-            <Text style={styles.cell}>{student.key}</Text>
-            <View style={styles.cell}>
-
-            </View>
-        </View>
+        >
+        </Checkbox>
     );
 };
-export default StudentCard;
+export default StudentRollList;
 
 const styles =  StyleSheet.create({
     container1: {
