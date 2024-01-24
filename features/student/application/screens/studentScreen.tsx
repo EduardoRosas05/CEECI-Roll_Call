@@ -4,7 +4,8 @@ import StudentCard from "./components/getStudentScreen";
 import { StudentProvider, useStudentState } from "../providers/getStudentProvider";
 import { FlatList, StyleSheet, Text, View, TouchableOpacity} from "react-native";
 import { IconButton } from 'react-native-paper';
-import Calendar from "../../../../components/calendar";
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 import Calen from "../../../../components/cale";
 
 const StudentScreenView = () => {
@@ -18,6 +19,8 @@ const StudentScreenView = () => {
 
         getStudent
     } = useStudentState();
+
+    console.log('Renderizando componente principal');
 
     const renderCards = () => {
         if (students == null){
@@ -44,22 +47,25 @@ const StudentScreenView = () => {
         console.log('Students:', students);
     }, [students]);
 
+
     return (
         <View >
             
             <View style={styles.head}>
-                <Text style={styles.textStyle}> Estudiantes :3</Text>
+                <Text style={styles.textStyleTitle}> Estudiantes</Text>
             </View>
 
-            <View style={styles.buttonCon}>
-                
+            <View style={styles.buttonCon}>   
                 <TouchableOpacity style={styles.buttonCo} onPress={() => setCalendarVisible(true)} >
-                    <IconButton icon={"calendar"} size={50}>
-                        
-                    </IconButton>   
-                    <Text style={styles.textStyle}>
-                        Selecione una fecha
-                    </Text>
+                    <IconButton icon={"calendar"} size={50} iconColor="green"/> 
+                        <Text style={styles.textStyleDate}>
+                        {selectedDate.toLocaleDateString(undefined, {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            timeZone: 'UTC'
+                        })}
+                        </Text>     
                 </TouchableOpacity>
             </View>
             
@@ -74,7 +80,7 @@ const StudentScreenView = () => {
                     setSelectedDate(date);
                     setCalendarVisible(false);
                 }}
-                />
+            />
             </View>
             <View>
             </View>
@@ -102,7 +108,13 @@ const styles = StyleSheet.create({
     buttonCo: {
         alignItems: 'center'
     },
-    textStyle: {
+    textStyleTitle: {
+        width: 'auto',
+        fontSize: 30,
+        fontWeight: 'bold',
+        textAlign: 'center'
+    },
+    textStyleDate: {
         width: 'auto',
         fontSize: 16,
         textAlign: 'center'
