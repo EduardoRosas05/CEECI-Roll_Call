@@ -7,27 +7,70 @@ import { useAddRollListState } from "../../providers/addRollListProvider";
 import { StudentProvider, useStudentState } from "../../providers/getStudentProvider";
 
 
-type CardProps = {
-    rolllist: RollList,
-}
-
-const StudentCard: React.FC<CardProps> = ({
-    rolllist,
+const AddStudentCard = ({
 }) => {
 
+  const {
+    loading, 
+    saved, 
+    success, 
+    message,
+    rollList,
+    errors, 
+
+    setRollListProp, 
+    saveRollList
+  } = useAddRollListState();
+
+  const {
+    students,
+
+    getStudent
+  } = useStudentState();
+
+  useEffect(()=> {
+    getStudent();
+  }, [])
+
+
+  const handleSaveList = async () => {
+    try {
+      await saveRollList();
+
+    }catch (error: any) {
+      console.error("Error al guardar al usuario:", error);
+        console.log("Respuesta del servidor:", error.response);
+  
+        if (typeof error.response === 'string') {
+          console.log("Respuesta del servidor (no JSON):", error.response);
+        } else {
+          throw error;
+        }
+      }
+  }
+
+  useEffect(() => {
+    if (success && message) {
+      Alert.alert('Usuario Registrado', message);
+    } else if (!success && message) {
+      Alert.alert('Error', message);
+    }
+  }, [success, message]);
 
     return(
         
         <View style={styles.container1}>
-            <Text style={styles.cell}> {rolllist.fullName}</Text>
-
-        
-            <Text style={styles.cell}> {rolllist.date}</Text>
-         
+          {students.map((student) => (
+            <Text style={styles.cell}> {student.fullName}</Text>
+          ))}
+          
+          {students.map((student) => (
+            <Text style={styles.cell}> {student.key}</Text>
+          ))} 
             
             <View style={styles.cell}>  
                 <Checkbox
-                value = {rolllist.attendance}
+                value = {rollList.attendance}
                 onValueChange = { ( ) => {
 
                 }}
@@ -37,13 +80,13 @@ const StudentCard: React.FC<CardProps> = ({
     );
 };
 
-const StudentList = (props: CardProps) => (
+const StudentListA = (props: any) => (
   <StudentProvider> 
-    <StudentCard {...props}/>
+    <AddStudentCard {...props}/>
   </StudentProvider>
 )
 
-export default StudentList;
+export default StudentListA;
 
 const styles =  StyleSheet.create({
     container1: {
