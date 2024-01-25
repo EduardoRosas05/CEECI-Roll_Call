@@ -2,6 +2,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AntDesign } from "@expo/vector-icons";
 import StudentScreen from "../features/student/application/screens/studentScreen";
+import AddStudentList from "../features/student/application/screens/components/addStudentScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -18,7 +19,7 @@ const NavigationStudent = () => {
         >
             <Tab.Screen
                 name="Asistencia actual"
-                component={StudentScreen}
+                component={AddStudentList}
                 options={{
                     tabBarLabelStyle:{
                         fontSize: 15,
