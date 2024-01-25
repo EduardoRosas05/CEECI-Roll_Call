@@ -1,6 +1,4 @@
 import { FC, ReactNode, createContext, useContext, useReducer } from "react";
-import Student from "../../domain/entities/student";
-import StudentResult from "../../domain/entities/studentResult";
 import StudentRepositoryImp from "../../infraestructure/repositories/studentRepositoryImp";
 import StudentDatasourceImp from "../../infraestructure/datasources/studentDatasourceImp";
 import RollList from "../../domain/entities/rollList";
