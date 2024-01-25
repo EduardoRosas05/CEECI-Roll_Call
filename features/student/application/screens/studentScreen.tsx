@@ -53,7 +53,7 @@ const StudentScreenView = () => {
     return (
         <View >
             
-            <View style={styles.head}>
+            <View>
                 <Text style={styles.textStyleTitle}> Estudiantes</Text>
             </View>
 
@@ -105,10 +105,6 @@ const styles = StyleSheet.create({
         marginLeft: '5%',
         marginRight: '5%'
     },
-    head: {
-        marginTop: 250,
-        fontSize: 16
-    },
     buttonCon:{
         flexDirection: 'row',
         justifyContent: 'center',
@@ -118,7 +114,7 @@ const styles = StyleSheet.create({
     },
     textStyleTitle: {
         width: 'auto',
-        fontSize: 30,
+        fontSize: 25,
         fontWeight: 'bold',
         textAlign: 'center'
     },
@@ -128,7 +124,7 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     container1: {
-        marginTop: 40,
+        marginTop: 5,
         marginLeft: '5%',
         marginRight: '5%',
         width: '90%',

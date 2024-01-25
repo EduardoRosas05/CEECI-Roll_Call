@@ -56,7 +56,7 @@ const initialState: AddRollListState = {
         false,
         0,
         '',
-        0
+        ''
     ),
     errors: {},
 };
@@ -168,4 +168,5 @@ function useAddRollListState (){
         return context;
 }
 
-export {AddRollListProvider, useAddRollListState};
+export {AddRollListProvider, useAddRollListState}
+
