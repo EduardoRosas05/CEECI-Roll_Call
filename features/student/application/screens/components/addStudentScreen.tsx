@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Student from "../../../domain/entities/student";
-import RollList from "../../../domain/entities/rollList";
-import { View, StyleSheet, Text, Alert } from "react-native";
+import { View, StyleSheet, Text, Alert, FlatList} from "react-native";
 import Checkbox from 'expo-checkbox';
 import { useAddRollListState } from "../../providers/addRollListProvider";
 import { StudentProvider, useStudentState } from "../../providers/getStudentProvider";
 
 
-const AddStudentCard = ({
+const StudentListA = ({
 }) => {
 
   const {
@@ -57,54 +55,71 @@ const AddStudentCard = ({
     }
   }, [success, message]);
 
+  
+
     return(
         
-        <View style={styles.container1}>
-          {students.map((student) => (
-            <Text style={styles.cell}> {student.fullName}</Text>
-          ))}
-          
-          {students.map((student) => (
-            <Text style={styles.cell}> {student.key}</Text>
-          ))} 
-            
-            <View style={styles.cell}>  
-                <Checkbox
-                value = {rollList.attendance}
-                onValueChange = { ( ) => {
+      <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.cell}>Nombre</Text>
+        <Text style={styles.cell}>Matrícula</Text>
+        <Text style={styles.cell}>Asistencia</Text>
+      </View>
+      
+{students.map((student) => (
+  <View style={styles.row} key={student.key}>
+  <Text style={styles.cellText}>{student.fullName}</Text>
+  <Text style={styles.cellText}>{student.key}</Text>
+  <View style={styles.cell}>
+    <Checkbox
+      onValueChange={() => {
 
-                }}
-            />      
-            </View>
-        </View>
-    );
+      }}
+    />
+  </View>
+</View>
+))}
+
+    </View>
+  );
 };
 
-const StudentListA = (props: any) => (
+const AddStudentList = (props: any) => (
   <StudentProvider> 
-    <AddStudentCard {...props}/>
+    <StudentListA {...props}/>
   </StudentProvider>
 )
 
-export default StudentListA;
+export default AddStudentList;
 
 const styles =  StyleSheet.create({
-    container1: {
-        width: '100%',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        borderBottomWidth: 1, // Agrega un borde inferior para separar las filas
-        borderColor: '#ccc', // Color del borde
-        paddingVertical: 7, // Espaciado vertical
-      },
-      cell: {
-        textAlign: 'center', // Centra el texto horizontalmente
-        flex: 1, // Hace que los elementos ocupen el mismo ancho
-        alignItems: 'center'
-      },
-      cell1: {
-        textAlign: 'center', // Centra el texto horizontalmente
-        marginRight: '3%',
-        maxWidth: '25%',
-      }
-    });
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    padding: 30,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
+    paddingVertical: 7,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
+    paddingVertical: 7,
+    marginTop: 5,
+  },
+  cell: {
+    width: '32%', // Ajusta el ancho según sea necesario
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cellText: {
+    textAlign: 'center',
+    width: 100, // Ajusta el ancho según sea necesario
+  },
+});

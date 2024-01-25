@@ -56,7 +56,8 @@ const initialState: AddRollListState = {
         false,
         0,
         '',
-        0
+        undefined,
+        undefined
     ),
     errors: {},
 };
