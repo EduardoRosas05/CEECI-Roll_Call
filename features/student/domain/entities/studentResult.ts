@@ -7,8 +7,9 @@ class StudentResult {
     constructor (
 
         student: Student[],
-        
+
     ) {
+        
         this.student = student;
     }
 }

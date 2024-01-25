@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Student from "../../domain/entities/student";
-import StudentCard from "./components/getStudentScreen";
 import { StudentProvider, useStudentState } from "../providers/getStudentProvider";
 import { FlatList, StyleSheet, Text, View, TouchableOpacity} from "react-native";
 import { IconButton } from 'react-native-paper';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import Calen from "../../../../components/cale";
+import { RollListProvider, useRollListState } from "../providers/getRollListProvider";
+import StudentList from "./components/getStudentScreen";
 
 const StudentScreenView = () => {
 
@@ -14,25 +15,26 @@ const StudentScreenView = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     
     const {
-        students,
         loading,
+        rolllist,
 
-        getStudent
-    } = useStudentState();
+        getRollList
+    } = useRollListState();
 
     console.log('Renderizando componente principal');
 
     const renderCards = () => {
-        if (students == null){
+        if (rolllist == null){
             return null;
         }
         
         return (
             <FlatList
-                data={students}
+                data={rolllist}
+                keyExtractor={(item) => `rollList${item.id}`}
                 renderItem={({item}) => (
-                    <StudentCard
-                        student={item}
+                    <StudentList
+                        rolllist={item}
                     />
                 )}
             />
@@ -40,12 +42,12 @@ const StudentScreenView = () => {
     };
 
     useEffect(()=>{
-        getStudent();
+        getRollList();
     }, []);
 
     useEffect(()=>{
-        console.log('Students:', students);
-    }, [students]);
+        console.log('Students:', rolllist);
+    }, [rolllist]);
 
 
     return (
@@ -68,9 +70,14 @@ const StudentScreenView = () => {
                         </Text>     
                 </TouchableOpacity>
             </View>
-            
+
+            <View style={styles.container1}>
+                <Text style={styles.cell}>Nombre</Text>
+                <Text style={styles.cell}>Matricula</Text>
+                <Text style={styles.cell}>Asistencia</Text>
+            </View>
             <View style={styles.list}>
-            {renderCards()}
+                {renderCards()}
             </View>
             <View>
             <Calen 
@@ -88,17 +95,18 @@ const StudentScreenView = () => {
     );
 }
 const StudentScreen = (props: any) => (
-    <StudentProvider>
+    <RollListProvider>
         <StudentScreenView {...props} />
-    </StudentProvider>
+    </RollListProvider>
 )
 
 const styles = StyleSheet.create({
     list: {
-        marginTop: 40
+        marginLeft: '5%',
+        marginRight: '5%'
     },
     head: {
-        marginTop: 200,
+        marginTop: 250,
         fontSize: 16
     },
     buttonCon:{
@@ -118,7 +126,23 @@ const styles = StyleSheet.create({
         width: 'auto',
         fontSize: 16,
         textAlign: 'center'
-    }
+    },
+    container1: {
+        marginTop: 40,
+        marginLeft: '5%',
+        marginRight: '5%',
+        width: '90%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        borderBottomWidth: 1, // Agrega un borde inferior para separar las filas
+        borderColor: '#ccc', // Color del borde
+        paddingVertical: 7, // Espaciado vertical
+      },
+      cell: {
+        flex: 1, // Hace que los elementos ocupen el mismo ancho
+        textAlign: 'center', // Centra el texto horizontalmente
+    },
+    
 });
 
 export default StudentScreen;

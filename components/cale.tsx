@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Modal, StyleSheet, View, SafeAreaView, Button } from "react-native";
+import React, { useState } from "react";
+import { Modal, StyleSheet, View, Text, Button } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { format } from 'date-fns';
 
@@ -9,27 +9,18 @@ interface CalendarModalProps {
   setSelectedDate: (date: Date) => void;
 }
 
-const Calen: React.FC<CalendarModalProps> = ({ visible, onClose, setSelectedDate }) => {
+const Calen: React.FC<CalendarModalProps> = ({ visible, onClose, setSelectedDate  }) => {
 
-  const [selectedDate, setSelectedDateState] = useState<Date | undefined>();
+  const [selectedDate] = useState<string | undefined>();
 
-  const handleDateSelect = (selectedDate: any) => {
-    if (selectedDate && selectedDate.dateString) {
-      setSelectedDateState(new Date(selectedDate.dateString));
-      setSelectedDate(new Date(selectedDate.dateString));
-      console.log('Efecto de fecha seleccionada en modal:', selectedDate.dateString)
-    } else {
-      setSelectedDateState(undefined);
-      setSelectedDateState(undefined);
-    }
+  const onDayPress = (day: any) => {
+    setSelectedDate(new Date(day.dateString));
+    console.log(selectedDate);
     onClose();
   };
 
-  const handleClose = () => {
-    onClose();  // Cierra el modal después de seleccionar una fecha
-  };
-
   return (
+    <View>
     <Modal
       animationType="slide"
       transparent={true}
@@ -39,13 +30,14 @@ const Calen: React.FC<CalendarModalProps> = ({ visible, onClose, setSelectedDate
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <Calendar
-            onDayPress={handleDateSelect}
-            markedDates={selectedDate ? { [selectedDate.toISOString()]: { selected: true } } : {}}
+            onDayPress={onDayPress}
+            markedDates={selectedDate ? { [selectedDate]: { selected: true } } : {}}
           />
-          <Button title="Cerrar" onPress={handleClose} />
+          <Button title="Cerrar" onPress={onClose} />
         </View>
       </View>
-    </Modal>
+    </Modal> 
+  </View>
   );
 };
 
