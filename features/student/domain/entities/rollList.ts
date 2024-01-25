@@ -3,14 +3,14 @@ class RollList {
     id? : number;
     attendance : boolean;
     studentId : number;
-    fullName: string;
+    fullName?: string;
     date : string;
 
     constructor (
         attendace : boolean,
         studentId : number,
-        fullName: string,
         date: string,
+        fullName?: string,
         id? : number,
     ){
         this.id = id;
