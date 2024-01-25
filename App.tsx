@@ -1,15 +1,32 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import StudentScreen from './features/student/application/screens/studentScreen';
-import AddStudentList from './features/student/application/screens/components/addStudentScreen';
+import { StyleSheet, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import NavigationStudent from './components/navigation';
 
+const Stack = createNativeStackNavigator();
+
+function Stacks(){
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="lista"
+        options={{
+          headerShown: false
+        }}
+        component={NavigationStudent}
+      >
+      </Stack.Screen>
+    </Stack.Navigator>
+  )
+}
 export default function App() {
   return (
-    <View style={styles.container}>
-      <AddStudentList/>
+    <NavigationContainer>
+      <Stacks/>
       <StatusBar style="auto" />
-    </View>
-  );
+    </NavigationContainer>
+  )
 }
 
 const styles = StyleSheet.create({
