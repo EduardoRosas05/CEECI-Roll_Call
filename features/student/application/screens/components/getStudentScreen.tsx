@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Student from "../../../domain/entities/student";
 import RollList from "../../../domain/entities/rollList";
 import { View, StyleSheet, Text, Alert } from "react-native";
 import Checkbox from 'expo-checkbox';
-import { useAddRollListState } from "../../providers/addRollListProvider";
-import { StudentProvider, useStudentState } from "../../providers/getStudentProvider";
 
 
 type CardProps = {
@@ -20,13 +17,12 @@ const StudentCard: React.FC<CardProps> = ({
         
         <View style={styles.container1}>
             <Text style={styles.cell}> {rolllist.fullName}</Text>
-
         
-            <Text style={styles.cell}> {rolllist.date}</Text>
-         
-            
+            <Text style={styles.cell}> {rolllist.courseFull}</Text>
+           
             <View style={styles.cell}>  
                 <Checkbox
+                color='#04B431'
                 value = {rolllist.attendance}
                 onValueChange = { ( ) => {
 
@@ -38,9 +34,7 @@ const StudentCard: React.FC<CardProps> = ({
 };
 
 const StudentList = (props: CardProps) => (
-  <StudentProvider> 
     <StudentCard {...props}/>
-  </StudentProvider>
 )
 
 export default StudentList;

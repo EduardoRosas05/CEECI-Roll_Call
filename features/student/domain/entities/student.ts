@@ -1,15 +1,16 @@
 class Student {
 
- id? : number;   
+ id?: number;   
  key: string;
  fullName: string;
 
  constructor (
+   
     key:string,
     fullName:string,
     id?:number,
  ){
-    this.id = id;
+    this.id = id || 0;
     this.key = key;
     this.fullName = fullName;
  }

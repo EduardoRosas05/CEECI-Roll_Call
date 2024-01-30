@@ -19,11 +19,11 @@ class StudentDatasourceImp extends StudentDatasource {
                 return new StudentResult([]);
             }
 
-            const students = jsonResponse.map((item:any) => {
+            const students = jsonResponse.map((item:any, index: number) => {
                 const student = new Student (
-                    item.key,
-                    item.fullName,
-                    item.id,
+                    item.key || '',
+                    item.fullName || '',
+                    +item.id || undefined 
                 );
                 return student;
             });
@@ -42,7 +42,9 @@ class StudentDatasourceImp extends StudentDatasource {
 
             console.log(jsonResponse);
 
-            if (!jsonResponse) {
+            if (!Array.isArray(jsonResponse)) {
+                // Si no es un array, devuelve un RollListResult vacío o maneja según sea necesario
+                console.error('La respuesta del servidor no es un array JSON');
                 return new RollListResult([]);
             }
 
@@ -50,8 +52,9 @@ class StudentDatasourceImp extends StudentDatasource {
                 const rollList = new RollList (
                     item.attendance,
                     item.studentId,
-                    item.fullName,
                     item.date,
+                    item.courseFull,
+                    item.fullName,
                     item.id,
                 );
                 return rollList;
