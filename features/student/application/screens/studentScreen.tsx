@@ -4,8 +4,7 @@
     import { FlatList, StyleSheet, Text, View, TouchableOpacity, Switch} from "react-native";
     import SelectDropdown from 'react-native-select-dropdown';
     import { Button, IconButton } from 'react-native-paper';
-    import { format, getHours } from 'date-fns';
-    import { es } from 'date-fns/locale';
+    import { format, } from 'date-fns';
     import Calen from "../../../../components/cale";
     import { RollListProvider, useRollListState } from "../providers/getRollListProvider";
     import StudentList from "./components/getStudentScreen";
@@ -17,6 +16,7 @@
         const [selectedDate, setSelectedDate] = useState(new Date());
         const [filteredRollList, setFilteredRollList] = useState<RollList[]>([]);
         const [selectedCourse, setSelectedCourse] = useState<any>(null);
+        const [forceUpdate, setForceUpdate] = useState(0);
         
 
         const {
@@ -25,8 +25,6 @@
 
             getRollList
         } = useRollListState();
-
-        console.log('Renderizando componente principal');
 
         const renderDropdownData = () => {
             if (!rolllist || rolllist.length === 0) {
@@ -46,10 +44,6 @@
         };
 
         useEffect(() => {
-
-            console.log('Rolllist:', rolllist);
-            console.log('Selected Date:', selectedDate);
-            console.log('Selected Course:', selectedCourse);
             
             // Filtrar la lista basándose en la fecha y el curso seleccionado
             const filteredList = rolllist.filter(item => {
@@ -90,30 +84,20 @@
 
         useEffect(()=>{
             getRollList();
-        }, []);
-
-        useEffect(()=>{
-            console.log('Students:', rolllist);
-        }, [rolllist]);
-
+        }, [forceUpdate]);
 
         return (
-            <View >
+            <View style={styles.container}>
                 
                 <View>
                     <Text style={styles.textStyleTitle}> Estudiantes</Text>
                 </View>
 
-                <View style={styles.buttonCon}>   
+                <View style={styles.buttonCo}>   
                     <TouchableOpacity style={styles.buttonCo} onPress={() => setCalendarVisible(true)} >
                         <IconButton icon={"calendar"} size={50} iconColor="green"/> 
                             <Text style={styles.textStyleDate}>
-                            {selectedDate.toLocaleDateString(undefined, {
-                                year: 'numeric',
-                                month: '2-digit',
-                                day: '2-digit',
-                                timeZone: 'UTC'
-                            })}
+                            {format(selectedDate, 'yyyy-MM-dd')}
                             </Text>     
                     </TouchableOpacity>
                 </View>
@@ -132,8 +116,15 @@
                 </View>
 
                 <View style={styles.buttonConReset}>
-                    <Button style={styles.buttonCo} onPress={handleReset} buttonColor='blue'>
+                    <Button style={styles.buttonReset} onPress={handleReset} buttonColor='#04B400'>
                         <Text style={styles.textStyleButton}>Restablecer</Text>
+                    </Button>
+                    <Button
+                        style={styles.buttonReset}
+                        onPress={() => setForceUpdate(prevState => prevState + 1)}
+                        buttonColor='#04B400'
+                        >
+                        <Text style={styles.textStyleButton}>Actualizar</Text>
                     </Button>
                 </View>
 
@@ -168,11 +159,14 @@
     )
 
     const styles = StyleSheet.create({
+        container: {
+            flex: 1
+        },
         list: {
             marginLeft: '5%',
             marginRight: '5%'
         },
-        buttonCon:{
+        buttonCalendar:{
             flexDirection: 'row',
             justifyContent: 'center',
         },
@@ -203,10 +197,17 @@
             textAlign: 'center'
         },
         buttonConReset: {
+            alignContent: 'center',
             flexDirection: 'row',
-            alignItems: 'center',
-            height:50,
+            display: 'flex',
+            justifyContent: 'space-between',
+            width: 200,
+            height: 40,
             marginVertical: 10,
+        },
+        buttonReset:{
+            justifyContent: 'center',
+            marginLeft: 60,
         },
         container1: {
             marginTop: 5,

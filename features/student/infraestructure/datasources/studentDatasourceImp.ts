@@ -21,7 +21,7 @@ class StudentDatasourceImp extends StudentDatasource {
 
             const students = jsonResponse.map((item:any, index: number) => {
                 const student = new Student (
-                    item.key || '',
+                    item.course || '',
                     item.fullName || '',
                     +item.id || undefined 
                 );

@@ -117,38 +117,6 @@
             });
         }
 
-/*         async function saveRollList():  Promise<void | AddRollListResult>{
-
-            console.log('Saving user:', state.rollList);
-
-            const rollListRepository = new StudentRepositoryImp(
-                new StudentDatasourceImp
-            )
-            // Actualiza el estado con la nueva data de asistencia si se pasa como parámetro
-            
-            const result = await rollListRepository.addRollList(state.rollList);
-            console.log('Save user result:', result);
-            if(result.rollList){
-                dispatch({
-                    type: "Set Success",
-                    payload: {
-                        success: true
-                    }
-                })
-            } else {
-                //manejar el caso si result.rollList no es un array
-                dispatch({
-                    type: "Set Errors",
-                    payload: {
-                        massage: result.message,
-                        errors: result.errors || {},
-                    },
-                });
-            }
-
-            return result;
-        } */
-
         async function saveRollList(attendanceData: { studentId: number; date: string; attendance: boolean }): Promise<void | AddRollListResult> {
             const { studentId, date, attendance } = attendanceData;
           
@@ -157,7 +125,6 @@
           
             const rollListRepository = new StudentRepositoryImp(new StudentDatasourceImp());
           
-            // Llamada a la función de agregar en el repository
             const result = await rollListRepository.addRollList(updatedRollList);
             console.log('Save user result:', result);
           
@@ -169,7 +136,6 @@
                 },
               });
             } else {
-              // Manejar el caso si result.rollList no es un array
               dispatch({
                 type: "Set Errors",
                 payload: {

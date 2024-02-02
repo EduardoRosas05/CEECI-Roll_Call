@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Modal, StyleSheet, View, Text, Button } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { format } from 'date-fns';
+import moment from 'moment-timezone';
 
 interface CalendarModalProps {
   visible: boolean;
@@ -11,11 +12,12 @@ interface CalendarModalProps {
 
 const Calen: React.FC<CalendarModalProps> = ({ visible, onClose, setSelectedDate  }) => {
 
-  const [selectedDate] = useState<string | undefined>();
+  const [selectedDate, setSelectedDateState] = useState<string | undefined>();
 
   const onDayPress = (day: any) => {
-    setSelectedDate(new Date(day.dateString));
-    console.log(selectedDate);
+    const selectedDateMoment = moment.tz(day.dateString, 'America/Mexico_City');
+    setSelectedDateState(selectedDateMoment.format('YYYY-MM-DD'));
+    setSelectedDate(selectedDateMoment.toDate());
     onClose();
   };
 

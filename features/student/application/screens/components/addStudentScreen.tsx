@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Text, Alert, FlatList, TouchableOpacity} from "react-native";
+import { View, StyleSheet, Text, Alert, FlatList, TouchableOpacity, ScrollView} from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Button } from 'react-native-paper';
 import { IconButton } from 'react-native-paper';
 import Checkbox from 'expo-checkbox';
-import { format, isToday } from 'date-fns';
+import { format } from 'date-fns';
 import { AddRollListProvider, useAddRollListState } from "../../providers/addRollListProvider";
 import { StudentProvider, useStudentState } from "../../providers/getStudentProvider";
 import Calen from "../../../../../components/cale";
 import RollList from "../../../domain/entities/rollList";
 import Student from "../../../domain/entities/student";
+import SelectDropdown from "react-native-select-dropdown";
 
 
 const StudentListA = ({
@@ -26,19 +26,46 @@ const StudentListA = ({
 
     const [isCalendarVisible, setCalendarVisible] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date());
+    const [filteredStudents, setFilteredStudents] = useState<Student[]>([]);
+    const [selectedCourse, setSelectedCourse] = useState(null);
     const [checkedItems, setCheckedItems] = useState(Array(students.length).fill(false));
+    const [highlightedRows, setHighlightedRows] = useState<Array<number>>([]);
+
+    useEffect(() => {
+      // Filtrar la lista basándose solo en el curso seleccionado
+      const filteredList = students.filter(student => selectedCourse === null || student.course === selectedCourse);
+      
+      setFilteredStudents(filteredList);
+    }, [students, selectedCourse]);
+
+    const renderDropdownData = () => {
+      if (!students || students.length === 0) {
+        return [];
+      }
+    
+      return Array.from(new Set(students.map(item => item.course)))
+        .map(course => ({ value: course, label: course })) as { value: string; label: string }[];
+    };
 
     useEffect(() => {
       const fetchData = async () => {
-        console.log('Antes de getStudent');
         await getStudent();
-        console.log('Después de getStudent, antes de loadCheckboxState');
         await loadCheckboxState();
-        console.log('Después de loadCheckboxState');
       };
     
       fetchData();
     }, []);
+
+    useEffect(() => {
+      // Efecto para manejar el resaltado temporal
+      if (highlightedRows.length > 0) {
+        const timer = setTimeout(() => {
+          setHighlightedRows([]);
+        }, 500); // Cambia este valor según la duración deseada del resaltado (en milisegundos)
+    
+        return () => clearTimeout(timer);
+      }
+    }, [highlightedRows]);
 
     const shouldResetCheckboxState = async () => {
       try {
@@ -101,6 +128,7 @@ const StudentListA = ({
       newCheckedItems[index] = !newCheckedItems[index];
     
       setCheckedItems(newCheckedItems);
+      setHighlightedRows([index]); 
     
       const studentId = students[index].id ?? 0;
       const date = format(selectedDate, 'yyyy-MM-dd');
@@ -135,34 +163,49 @@ const StudentListA = ({
                 <View style={styles.buttonCo} >
                     <IconButton icon={"calendar"} size={50} iconColor="#01A9DB"/> 
                         <Text style={styles.textStyleDate}>
-                        {selectedDate.toLocaleDateString(undefined, {
-                            year: 'numeric',
-                            month: '2-digit',
-                            day: '2-digit',
-                            timeZone: 'UTC'
-                        })}
+                        {format(selectedDate, 'yyyy-MM-dd')}
                         </Text>     
                 </View>
             </View>
+
+          <View style={styles.dropdown}>
+          <SelectDropdown
+              data={renderDropdownData()}
+              onSelect={(selectedItem, index) => setSelectedCourse(selectedItem.value)}
+              defaultButtonText="Filtrar por curso"
+              buttonTextAfterSelection={(selectedItem, index) => selectedItem.label}
+              rowTextForSelection={(item, index) => item.label}
+          />
+          </View>
+
       <View style={styles.header}>
         <Text style={styles.cell}>Nombre</Text>
-        <Text style={styles.cell}>Matrícula</Text>
+        <Text style={styles.cell}>Curso</Text>
         <Text style={styles.cell}>Asistencia</Text>
       </View>
-      
-          {students.map((student, index) => (
-              <View style={styles.row} key={`student-row-${index}`}>
-              <Text style={styles.cellText}>{student.fullName}</Text>
-              <Text style={styles.cellText}>{student.key}</Text>
-              <View style={styles.cell}>
+
+      <ScrollView>
+        {filteredStudents.map((student, index) => (
+          <View
+            key={`student-row-${index}`}
+            style={[
+              styles.row,
+              highlightedRows.includes(index) && { backgroundColor: checkedItems[index] ? '#95DA73' : '#DBAE60' },
+            ]}
+          >
+            <Text style={styles.cellText}>{student.fullName}</Text>
+            <Text style={styles.cellText}>{student.course}</Text>
+            <View style={styles.cell}>
               <Checkbox
-              color='#086A87'
+                color='#086A87'
                 value={checkedItems[index]}
                 onValueChange={() => handleCheckboxChangeAndSave(index)}
               />
             </View>
           </View>
-          ))}
+        ))}
+      </ScrollView>
+      
 
             <Calen
                 visible={isCalendarVisible} 
@@ -210,6 +253,20 @@ const styles =  StyleSheet.create({
     paddingVertical: 7,
     marginTop: 5,
   },
+  dropdown: {
+    borderRadius: 15,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  rowPresent: {
+    borderRadius: 7,
+    backgroundColor: 'green', // Color de fondo para asistencia
+  },
+
+  rowAbsent: {
+    borderRadius: 7,
+    backgroundColor: 'orange', // Color de fondo para falta
+  },
   cell: {
     width: '32%', // Ajusta el ancho según sea necesario
     justifyContent: 'center',
@@ -220,7 +277,7 @@ const styles =  StyleSheet.create({
     fontSize: 25,
     fontWeight: 'bold',
     textAlign: 'center'
-},
+  },
   cellText: {
     textAlign: 'center',
     width: 100, // Ajusta el ancho según sea necesario
@@ -233,7 +290,6 @@ const styles =  StyleSheet.create({
     width: 'auto',
     marginLeft: 8,
     marginRight: 8  
-
   },
     buttonCo: {
       alignItems: 'center'
